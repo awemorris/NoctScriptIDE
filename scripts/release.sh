@@ -67,11 +67,10 @@ rm -rf build-dir
 #
 
 cd bin
-zip -r ../dist/NoctVM-stable.zip \
+zip -r ../dist/Noct2D-stable.zip \
     hash \
-    noctvm-x86.exe \
-    noctvm-arm64.exe \
-    noctvm-macos \
+    noct2d-x86.exe \
+    noct2d-arm64.exe \
     NoctVM.dmg \
     noctvm-linux-aarch64 \
     noctvm-linux-x86_64 \

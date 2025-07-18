@@ -342,11 +342,11 @@ void MainWindow::runBatchScript(const QString& fileName)
 
 void MainWindow::runGameScript(const QString& fileName)
 {
-    // Get the noctvm command path.
+    // Get the noct2d command path.
 #if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
-    QString binPath = QCoreApplication::applicationDirPath() + "/noctvm";
+    QString binPath = QCoreApplication::applicationDirPath() + "/noct2d";
 #elif defined(Q_OS_WIN)
-    QString binPath = QCoreApplication::applicationDirPath() + "/noctvm.exe";
+    QString binPath = QCoreApplication::applicationDirPath() + "/noct2d.exe";
     binPath.replace('/', '\\');
 #endif
 

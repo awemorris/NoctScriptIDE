@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+ "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key>
+  <string>com.noctscript.ide</string>
+
+  <key>CFBundleName</key>
+  <string>NoctScript</string>
+
+  <key>CFBundleDisplayName</key>
+  <string>NoctScript</string>
+
+  <key>CFBundleExecutable</key>
+  <string>NoctScript</string>
+
+  <key>CFBundleShortVersionString</key>
+  <string>1.0</string>
+
+  <key>CFBundleVersion</key>
+  <string>1.0.0</string>
+
+  <key>NSHighResolutionCapable</key>
+  <true/>
+
+  <key>NSRequiresAquaSystemAppearance</key>
+  <false/>
+
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+
+  <key>MinimumOSVersion</key>
+  <string>14.0</string>
+
+  <key>UIDeviceFamily</key>
+  <array>
+    <integer>1</integer>
+    <integer>2</integer>
+  </array>
+
+  <key>UISupportedInterfaceOrientations~ipad</key>
+  <array>
+    <string>UIInterfaceOrientationPortrait</string>
+    <string>UIInterfaceOrientationLandscapeLeft</string>
+    <string>UIInterfaceOrientationLandscapeRight</string>
+  </array>
+</dict>
+</plist>

@@ -14,7 +14,6 @@
 #include <QFileDialog>
 
 MainWindow *MainWindow::singleton;
-QString MainWindow::projectDir;
 
 int main(int argc, char *argv[])
 {
@@ -70,7 +69,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::createViews()
 {
-    this->setWindowTitle(tr("NoctCraft IDE"));
+    this->setWindowTitle(tr("NoctScript IDE"));
     
     this->createProjectView();
     this->createMainTabView();
@@ -107,36 +106,39 @@ void MainWindow::createToolBar()
 //    layout->setContentsMargins(6, 4, 6, 4);
 //    layout->setSpacing(12);
 
+/*
     QToolButton *newBtn = new QToolButton();
     newBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileIcon));
-    newBtn->setToolTip("New Project");
+    newBtn->setToolTip("New File");
     newBtn->setAutoRaise(true);
+    connect(newBtn, &QToolButton::clicked, this, [=]() {
+        this->createNewFileTab();
+    });
 
-    QToolButton *openBtn = new QToolButton();
-    openBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileIcon));
-    openBtn->setToolTip("New Project");
-    openBtn->setAutoRaise(true);
+    QToolButton *runBtn = new QToolButton();
+    runBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaPlay));
+    runBtn->setToolTip("Run Program");
+    runBtn->setAutoRaise(true);
+    connect(runBtn, &QToolButton::clicked, this, [=]() {
+        this->runBatchScript();
+    });
 
-    QToolButton *someBtn1 = new QToolButton();
-    someBtn1->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileIcon));
-    someBtn1->setToolTip("New Project");
-    someBtn1->setAutoRaise(true);
+    QToolButton *replBtn = new QToolButton();
+    replBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_ComputerIcon));
+    replBtn->setToolTip("Run REPL");
+    replBtn->setAutoRaise(true);
 
-    QToolButton *someBtn2 = new QToolButton();
-    someBtn2->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileIcon));
-    someBtn2->setToolTip("New Project");
-    someBtn2->setAutoRaise(true);
-
-    QToolButton *someBtn3 = new QToolButton();
-    someBtn3->setIcon(QApplication::style()->standardIcon(QStyle::SP_FileIcon));
-    someBtn3->setToolTip("New Project");
-    someBtn3->setAutoRaise(true);
+    QToolButton *gameBtn = new QToolButton();
+    gameBtn->setIcon(QApplication::style()->standardIcon(QStyle::SP_ArrowForward));
+    gameBtn->setToolTip("Run REPL");
+    gameBtn->setAutoRaise(true);
 
     layout->addWidget(openBtn);
     layout->addWidget(newBtn);
     layout->addWidget(someBtn1);
     layout->addWidget(someBtn2);
     layout->addWidget(someBtn3);
+*/
 }
 
 void MainWindow::createProjectTabView()
@@ -194,53 +196,46 @@ void MainWindow::createWelcomeTab()
 
     layout->addStretch();
 
-    QLabel* title1Label = new QLabel(tr("NoctCraft IDE"));
+    QLabel* title1Label = new QLabel(tr("NoctScript IDE"));
     title1Label->setStyleSheet("font-size: 36pt;");
     layout->addWidget(title1Label, 0, Qt::AlignHCenter);
 
-    QLabel* title2Label = new QLabel(tr("Version 2025.1"));
+    QLabel* title2Label = new QLabel(tr("Version 2025.07"));
     title2Label->setStyleSheet("font-size: 16pt;");
     layout->addWidget(title2Label, 0, Qt::AlignHCenter);
 
     layout->addStretch();
 
-    QPushButton* newButton = new QPushButton(tr("New Project"));
+    QPushButton* newButton = new QPushButton(tr("New File"));
     newButton->setStyleSheet("font-size: 12pt;");
     QObject::connect(newButton, &QPushButton::clicked, [this]() {
-        this->onClickNewProject();
+        this->onClickNewFile();
     });
     layout->addWidget(newButton, 0, Qt::AlignHCenter);
-
-    QPushButton* openButton = new QPushButton(tr("Open Project"));
-    openButton->setStyleSheet("font-size: 12pt;");
-    QObject::connect(openButton, &QPushButton::clicked, [this]() {
-        this->onClickOpenProject();
-    });
-    layout->addWidget(openButton, 0, Qt::AlignHCenter);
 
     layout->addStretch();
 }
 
-void MainWindow::createNewProjectTab()
+void MainWindow::createNewFileTab()
 {
-    if (m_newProjectTab != nullptr)
+    if (m_newFileTab != nullptr)
         return;
 
-    m_newProjectTab = new QWidget();
+    m_newFileTab = new QWidget();
 
-    QVBoxLayout* layout = new QVBoxLayout(m_newProjectTab);
+    QVBoxLayout* layout = new QVBoxLayout(m_newFileTab);
 
     layout->addStretch();
 
-    QLabel* titleLabel = new QLabel(tr("New Project"));
+    QLabel* titleLabel = new QLabel(tr("New File"));
     titleLabel->setStyleSheet("font-size: 24pt;");
     layout->addWidget(titleLabel, 0, Qt::AlignHCenter);
 
-    QLabel* nameLabel = new QLabel(tr("Project Name:"));
+    QLabel* nameLabel = new QLabel(tr("File Name:"));
     layout->addWidget(nameLabel, 0, Qt::AlignHCenter);
 
-    m_projectNameEdit = new QLineEdit(tr(""));
-    layout->addWidget(m_projectNameEdit, 0, Qt::AlignHCenter);
+    m_fileNameEdit = new QLineEdit(tr(""));
+    layout->addWidget(m_fileNameEdit, 0, Qt::AlignHCenter);
 
     QLabel* baseLabel = new QLabel(tr("Parent Folder:"));
     layout->addWidget(baseLabel, 0, Qt::AlignHCenter);
@@ -251,21 +246,21 @@ void MainWindow::createNewProjectTab()
 
     QPushButton* chooseButton = new QPushButton(tr("Choose Folder"));
     QObject::connect(chooseButton, &QPushButton::clicked, [this]() {
-        this->onClickChooseProjectFolder();
+        this->onClickChooseParentFolder();
     });
     layout->addWidget(chooseButton, 0, Qt::AlignHCenter);
 
     QPushButton* createButton = new QPushButton(tr("Create"));
     QObject::connect(createButton, &QPushButton::clicked, [this]() {
-        this->onClickCreateNewProject();
+        this->onClickCreateNewFile();
     });
     layout->addWidget(createButton, 0, Qt::AlignHCenter);
 
     layout->addStretch();
     layout->addStretch();
 
-    m_mainTabView->addTab(m_newProjectTab, tr("New Project"));
-    m_mainTabView->setCurrentWidget(m_newProjectTab);
+    m_mainTabView->addTab(m_newFileTab, tr("New File"));
+    m_mainTabView->setCurrentWidget(m_newFileTab);
 }
 
 void MainWindow::addTextEditorTab(const QString& fileName)
@@ -280,6 +275,11 @@ void MainWindow::addTextEditorTab(const QString& fileName)
     m_editorTabs.append(tab);
     m_mainTabView->addTab(tab, title);
     m_mainTabView->setCurrentWidget(tab);
+}
+
+void MainWindow::runREPL()
+{
+    runBatchScript("");
 }
 
 void MainWindow::runBatchScript(const QString& fileName)
@@ -340,11 +340,8 @@ void MainWindow::runBatchScript(const QString& fileName)
 #endif
 }
 
-void MainWindow::runGameScript()
+void MainWindow::runGameScript(const QString& fileName)
 {
-    if (MainWindow::projectDir.isEmpty())
-        return;
-
     // Get the noctvm command path.
 #if defined(Q_OS_MAC) || defined(Q_OS_LINUX)
     QString binPath = QCoreApplication::applicationDirPath() + "/noctvm";
@@ -353,8 +350,12 @@ void MainWindow::runGameScript()
     binPath.replace('/', '\\');
 #endif
 
+    // Get a parent folder.
+    QFileInfo info(fileName);
+    QString dirName = info.absolutePath();
+
     // Execute.
-    QProcess::startDetached(binPath, {".", "."}, MainWindow::projectDir);
+    QProcess::startDetached(binPath, {".", "."}, dirName);
 }
 
 void MainWindow::onCloseTab(int index)
@@ -363,8 +364,8 @@ void MainWindow::onCloseTab(int index)
 
     if (tab == m_welcomeTab)
         m_welcomeTab = NULL;
-    else if (tab == m_newProjectTab)
-        m_newProjectTab = NULL;
+    else if (tab == m_newFileTab)
+        m_newFileTab = NULL;
     else
         m_editorTabs.removeOne(tab);
 
@@ -388,12 +389,12 @@ void MainWindow::onFileDoubleClicked(const QModelIndex &index)
         this->addTextEditorTab(filePath);
 }
 
-void MainWindow::onClickNewProject()
+void MainWindow::onClickNewFile()
 {
-    this->createNewProjectTab();
+    this->createNewFileTab();
 }
 
-void MainWindow::onClickChooseProjectFolder()
+void MainWindow::onClickChooseParentFolder()
 {
     QString dir = QFileDialog::getExistingDirectory(
         nullptr,
@@ -406,51 +407,18 @@ void MainWindow::onClickChooseProjectFolder()
     m_parentFolderEdit->setText(dir);
 }
 
-void MainWindow::onClickCreateNewProject()
+void MainWindow::onClickCreateNewFile()
 {
-    QString name = m_projectNameEdit->text();
+    QString name = m_fileNameEdit->text();
     QString base = m_parentFolderEdit->text();
     QString full = base + "/" + name;
 
-    // Create the project directory.
-    QDir dir;
-    if (!dir.mkpath(full)) {
-        QMessageBox::warning(nullptr, "Error", "Cannot create a folder.");
-        return;
-    }
-
-    // Set the project directory.
-    MainWindow::projectDir = full;
-
-    // Update the file tree.
-    m_fileTreeModel->setRootPath(MainWindow::projectDir);
-
     // Open a new main script.
-    QString filePath = full + "/main.ns";
     for (TextEditTab *tab : m_editorTabs) {
-        if (tab->getFileName() == filePath) {
+        if (tab->getFileName() == full) {
             m_mainTabView->setCurrentWidget(tab);
             return;
         }
     }
-    this->addTextEditorTab(full + "/main.ns");
-}
-
-void MainWindow::onClickOpenProject() {
-    QString dir = QFileDialog::getExistingDirectory(
-        nullptr,
-        "Choose a project folder.",
-        QDir::homePath(),
-        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if (dir.isEmpty())
-        return;
-
-    // Set the project directory.
-    MainWindow::projectDir = dir;
-
-    // Update the file tree.
-    m_fileTreeModel->setRootPath(dir);
-
-    // Open the main script.
-    this->addTextEditorTab(dir + "/main.ns");
+    this->addTextEditorTab(full);
 }

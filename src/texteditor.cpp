@@ -163,16 +163,23 @@ void TextEditor::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    // Ctrl+Shift+R: run a batch script.
-    if (event->key() == Qt::Key_R && event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
+    // Ctrl+T: run REPL.
+    if (event->key() == Qt::Key_T && event->modifiers() == Qt::ControlModifier) {
+        if (!m_fileName.isEmpty())
+            MainWindow::runREPL();
+        return;
+    }
+
+    // Ctrl+R: run a batch script.
+    if (event->key() == Qt::Key_R && event->modifiers() == Qt::ControlModifier) {
         if (!m_fileName.isEmpty())
             MainWindow::runBatchScript(m_fileName);
         return;
     }
 
-    // Ctrl+R: run a game.
-    if (event->key() == Qt::Key_R && event->modifiers() == Qt::ControlModifier) {
-        MainWindow::runGameScript();
+    // Ctrl+G: run a game.
+    if (event->key() == Qt::Key_G && event->modifiers() == Qt::ControlModifier) {
+        MainWindow::runGameScript(m_fileName);
         return;
     }
 

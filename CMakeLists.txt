@@ -109,6 +109,13 @@ if(WIN32)
     COMMAND ${Qt6_DIR}/../../../bin/windeployqt --release "${CMAKE_BINARY_DIR}/app/NoctScript.exe"
   )
 
+  # Copy noct.exe and noct2d.exe.
+  add_custom_command(TARGET NoctScript POST_BUILD
+    COMMENT "Copy NoctLang and Noct2D"
+    COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:noct>" "${CMAKE_BINARY_DIR}/app/noct.exe"
+    COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:noct2d>" "${CMAKE_BINARY_DIR}/app/noct2d.exe"
+  )
+
   # Resources at share/.
   add_custom_command(TARGET NoctScript POST_BUILD
     COMMENT "Copying binary resource."
@@ -122,7 +129,7 @@ if(APPLE AND NOT IOS)
   # Make an app bundle.
   set_target_properties(NoctScript PROPERTIES
     MACOSX_BUNDLE TRUE
-    MACOSX_BUNDLE_GUI_IDENTIFIER "io.noctvm.noctcraft"
+    MACOSX_BUNDLE_GUI_IDENTIFIER "io.noctvm.noctscript"
     MACOSX_BUNDLE_BUNDLE_NAME "NoctScript"
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/resources/macos/Info.plist"
   )
@@ -137,15 +144,15 @@ if(APPLE AND NOT IOS)
     MACOSX_BUNDLE_ICON_FILE "icon.icns"
   )
 
-  # Copy `noct` and `noctvm`.
+  # Copy `noct` and `noct2d`.
   add_custom_command(TARGET NoctScript POST_BUILD
     COMMENT "Copying binary resource."
     COMMAND ${CMAKE_COMMAND} -E copy
             $<TARGET_FILE:noct>
             $<TARGET_BUNDLE_DIR:NoctScript>/Contents/MacOS/noct
     COMMAND ${CMAKE_COMMAND} -E copy
-            $<TARGET_FILE:noctvm>
-            $<TARGET_BUNDLE_DIR:NoctScript>/Contents/MacOS/noctvm
+            $<TARGET_FILE:noct2d>
+            $<TARGET_BUNDLE_DIR:NoctScript>/Contents/MacOS/noct2d
   )
 
   # Resources at share/.
@@ -179,7 +186,7 @@ endif()
 
 if(LINUX)
   install(TARGETS NoctScript RUNTIME DESTINATION bin)
-  install(TARGETS noctvm RUNTIME DESTINATION bin)
+  install(TARGETS noct2d RUNTIME DESTINATION bin)
   install(TARGETS noct RUNTIME DESTINATION bin)
   install(DIRECTORY ${CMAKE_SOURCE_DIR}/bin DESTINATION share/noctscript)
 endif()

@@ -19,15 +19,13 @@ public:
     MainWindow();
     ~MainWindow();
 
+    static void runREPL();
     static void runBatchScript(const QString& fileName);
-    static void runGameScript();
+    static void runGameScript(const QString& fileName);
 
 private:
     // Singleton instance.
     static MainWindow *singleton;
-
-    // Project directory.
-    static QString projectDir;
 
     // Tool Bar
     QWidget *m_toolBar;
@@ -49,13 +47,13 @@ private:
     // Welcome Tab
     QWidget *m_welcomeTab;
 
-    // New Project Tab
-    QWidget *m_newProjectTab;
+    // New File Tab
+    QWidget *m_newFileTab;
 
-    // Project Name (New Project Tab)
-    QLineEdit *m_projectNameEdit;
+    // File Name (New File Tab)
+    QLineEdit *m_fileNameEdit;
 
-    // Parent Folder (New Project Tab)
+    // Parent Folder (New File Tab)
     QLineEdit *m_parentFolderEdit;
 
     // Editor Tabs
@@ -68,17 +66,16 @@ private:
     void createFileTreeView();
     void createMainTabView();
     void createWelcomeTab();
-    void createNewProjectTab();
+    void createNewFileTab();
 
     void addTextEditorTab(const QString& fileName);
 
 private slots:
-    void onClickNewProject();
+    void onClickNewFile();
     void onCloseTab(int index);
     void onFileDoubleClicked(const QModelIndex &index);
-    void onClickChooseProjectFolder();
-    void onClickCreateNewProject();
-    void onClickOpenProject();
+    void onClickChooseParentFolder();
+    void onClickCreateNewFile();
 };
 
 #endif
